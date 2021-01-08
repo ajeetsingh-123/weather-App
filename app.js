@@ -27,7 +27,7 @@ const server = http.createServer((req, res) => {
   request.post('/', {form:{id:'loc'}})
   if (req.url == "/") {
     requests(
-      `http://api.openweathermap.org/data/2.5/weather?q=hyderabad&appid=50e0e742859a371cbb864a29af9560c5&units=metric`
+      `http://api.openweathermap.org/data/2.5/weather?q=hyderabad&appid=${process.env.APPID}&units=metric`
     )
       .on("data", (chunk) => {
         const objdata = JSON.parse(chunk);
