@@ -8,7 +8,7 @@ app.use(express.json());
 app.use(bodyparser.urlencoded({
   extended:true
 }));
-
+const port = process.env.PORT || 8000;
 const homeFile = fs.readFileSync("home.html", "utf-8");
 
 const replaceVal = (tempVal, orgVal) => {
@@ -78,6 +78,6 @@ const replaceVal = (tempVal, orgVal) => {
         });
     })
 
-app.listen(8000, ()=>{
+app.listen(port, ()=>{
     console.log("server started");
 });
