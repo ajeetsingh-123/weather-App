@@ -1,13 +1,23 @@
 require('dotenv').config();
-const http = require("http");
 const fs = require("fs");
 var requests = require("requests");
-var qs = require('querystring');
-//const http = require('http').createServer(app);
+const express = require("express");
+const bodyparser = require("body-parser");
+const app = express();
+app.use(express.json());
+app.use(bodyparser.urlencoded({
+  extended:true
+}));
 
 const homeFile = fs.readFileSync("home.html", "utf-8");
 
 const replaceVal = (tempVal, orgVal) => {
+  if(!orgVal.name)
+  {
+    console.log("please enter valid location")
+    return ;
+  }
+ 
 //   let temperature = tempVal.replace("{%tempval%}",(orgVal.main.temp- 273.15).toFixed(2));
 //   temperature = temperature.replace("{%tempmin%}", ( orgVal.main.temp_min- 273.15).toFixed(2));
 //   temperature = temperature.replace("{%tempmax%}", ( orgVal.main.temp_max- 273.15).toFixed(2));
@@ -20,34 +30,54 @@ const replaceVal = (tempVal, orgVal) => {
 
   return temperature;
 };
-
-const server = http.createServer((req, res) => {
-  // var loc=req.body.loc; 
-  //  console.log(loc)
-  request.post('/', {form:{id:'loc'}})
-  if (req.url == "/") {
-    requests(
-      `http://api.openweathermap.org/data/2.5/weather?q=hyderabad&appid=${process.env.APPID}&units=metric`
-    )
-      .on("data", (chunk) => {
-        const objdata = JSON.parse(chunk);
-        const arrData = [objdata];
-        // console.log(arrData[0].main.temp);
-        const realTimeData = arrData
+  //${process.env.APPID}
+  app.get('/', (req, res)=>{
+      requests(
+        `http://api.openweathermap.org/data/2.5/weather?q=hyderabad&appid=${process.env.APPID}&units=metric`
+      )
+        .on("data", (chunk) => {
+          const objdata = JSON.parse(chunk);
+          const arrData = [objdata];
+          // console.log(arrData[0].main.temp);
+          const realTimeData = arrData
+            .map((val) => replaceVal(homeFile, val))
+            .join("");
+          res.write(realTimeData);
+          console.log("connected");
+        })
+        .on("end", (err) => {
+          if (err) return console.log("connection closed due to errors", err);
+         res.end();
+        });
+    })
+    app.post('/', (req, res)=>{
+      loc = req.body.loc
+      console.log(loc)
+      requests(
+        `http://api.openweathermap.org/data/2.5/weather?q=${loc}&appid=50e0e742859a371cbb864a29af9560c5&units=metric`
+      )
+        .on("data", (chunk) => {
+          const objdata = JSON.parse(chunk);
+          const arrData = [objdata];
+          // console.log(arrData[0].main.temp)
+         
+          if(arrData[0].cod=='404'){
+           res.write(arrData[0].message);   
+         }
+         else{
+          const realTimeData = arrData
           .map((val) => replaceVal(homeFile, val))
           .join("");
         res.write(realTimeData);
         console.log("connected");
-      })
-      .on("end", (err) => {
-        if (err) return console.log("connection closed due to errors", err);
-        res.end("something went wrong");
-      });
-  } else {
-    res.end("Location is not found");
-  }
-});
+         }
+        })
+        .on("end", (err) => {
+          if (err) return console.log("connection closed due to errors", err);
+          res.end();
+        });
+    })
 
-server.listen(8000, ()=>{
+app.listen(8000, ()=>{
     console.log("server started");
 });

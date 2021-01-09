@@ -11,20 +11,21 @@
         <div id="fas fa-sun"><i class=" fas fa-sun"  style="color:red"></i> </div>
         <div class="main-content">
 
-            <p>Use this site to get your weather!</p>
+            <p>Use this site to get your current weather!</p>
             <form action="/" method="post">
-                <input id="loc" name="loc" placeholder="Location">
-                <button id="send" type="submit">Search</button>
+                <input type ="text" name="loc" placeholder="Location" required>
+                <button type="submit" value="submit">Search</button>
             </form>
 
         </div>  
         <div class="info">
             <h2 class="location">
-                <i class="fas fa-street-view"></i>{%location%},{%country%}</h2>
+                <i class="fas fa-street-view"></i>{%location%}, {%country%}</h2>
                 <p id="date"></p>
                 <h1 class="temp">{%tempval%}&deg;C</h1>
                 <h3 class="tempmin_max">Min {%tempmin%}&deg;C | Max {%tempmax%}&deg;C</h3>
         </div>
+
 <script>      
 document.getElementById("date").innerHTML = formatAMPM();
 function formatAMPM() {
