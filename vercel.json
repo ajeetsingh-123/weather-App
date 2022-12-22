@@ -1,6 +1,6 @@
 {
    "version": 2,
-   "name": "weather app",
+   "name": "weather-app-2",
    "builds": [
       { "src": "app.js", "use": "@vercel/node" }
    ],
