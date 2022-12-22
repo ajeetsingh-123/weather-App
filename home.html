@@ -35,7 +35,7 @@ var d = new Date(),
     ampm = d.getHours() >= 12 ? 'pm' : 'am',
     months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
     days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-return days[d.getDay()]+' | '+months[d.getMonth()]+' | '+d.getDate()+' | '+d.getFullYear()+' | '+hours+':'+minutes+ampm;
+return days[d.getDay()]+' | '+months[d.getMonth()]+' | '+d.getDate()+' | '+d.getFullYear()+' | '+hours+':'+minutes;
 }
 </script>
 </body>
