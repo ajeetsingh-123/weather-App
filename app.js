@@ -9,7 +9,9 @@ app.use(bodyparser.urlencoded({
   extended:true
 }));
 const port = process.env.PORT || 8000;
-const homeFile = fs.readFileSync("home.html", "utf8");
+const baseDir = __dirname + "/";
+const filePath = baseDir + "home.html";
+const homeFile = fs.readFileSync(filePath, "utf8");
 
 const replaceVal = (tempVal, orgVal) => {
   if(!orgVal.name)
